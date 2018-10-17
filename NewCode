@@ -53,5 +53,5 @@ for month in monthcount.keys():
     print('total for {} = {}'.format(month,monthcount[month]))
 
 #ANSWERING #3 AND #4
-print ('Amount of Sucessful Requests: ' + errorcount)
-print ('Amount of Unsucessful Requests: ' + newcount)
+print 'Amount of Sucessful Requests: ', errorcount
+print 'Amount of Unsucessful Requests: ', newcount
