@@ -2,27 +2,33 @@
 import urllib2  # the lib that handles the url stuff
 
 count =0
-data = urllib2.urlopen('https://s3.amazonaws.com/tcmg476/http_access_log') # it's a file like object and works just like a file
+data = urllib2.urlopen('https://s3.amazonaws.com/tcmg476/http_access_log') 
 datecount = {} #Dictionary to store the count for every date
 monthcount = {} #Dictionary to store the count for every month
 errorcount=0
 newcount=0
-for line in data: # files are iterable
+
+for line in data: 
     #Example of one line
     #'local - - [25/Oct/1994:10:08:07 -0600] "GET index.html HTTP/1.0" 200 3185\n'
     
-    count+=1
+    #trying to get dates
+	count+=1
     left=line.find('[')
     right=line.find(':')
     date=line[left+1:right]
+	
+	#code to answer #2
     if not date[0].isdigit(): #Something wrong with this line
         continue #skip
+		
     if not date in datecount.keys():
         datecount[date]=1 #Set initial value
     else:
         datecount[date]+=1 #Increment value
 
-    datewords=date.split('/')
+    datewords=date.split('/') #Splits date further
+	
     try:
         month=datewords[1]
         if not month in monthcount.keys():
@@ -32,21 +38,29 @@ for line in data: # files are iterable
     except:
         continue
 
+	#code to answer #3 and #4
     words=line.split()
     try:
         code=int(words[-2])
-        if code>=400 and code<500:
+        if code>=400 and code<500:  #if successful
             errorcount+=1
-        if code>=300 and code<400:
+        if code>=300 and code<400:  #if unsuccesful
             newcount+=1
     except:
         continue
-   
+		
+		
+#ANSWERING #1   
 print('total requests = {}'.format(count)) #for taking the amount of lines in logfile
+
+
+#ANSWERING #2- ONLY DAYS AND MONTHS (COULD NOT FIND WEEKS)
 for date in datecount.keys():
     print('total for {} = {}'.format(date,datecount[date]))
 for month in monthcount.keys():
     print('total for {} = {}'.format(month,monthcount[month]))
-
+	
+	
+#ANSWERING #3 AND #4
 print ('Number of Unsuccesful Requests: ' + errorcount)
-print (''Number of Succesful Requests: 'newcount)
+print ('Number of Succesful Requests: 'newcount)
