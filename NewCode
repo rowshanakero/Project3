@@ -1,8 +1,6 @@
-#Here
 
 import urllib2  # the lib that handles the url stuff
-import re
-from collections import Counter
+
 count =0
 data = urllib2.urlopen('https://s3.amazonaws.com/tcmg476/http_access_log') # it's a file like object and works just like a file
 datecount = {} #Dictionary to store the count for every date
@@ -45,26 +43,33 @@ for line in data:
             newcount+=1
     except:
         continue
-#my trying get #5 and #6 to work
-mydata = data.read()
-words = (re.findall(r'"(.*?)"', mydata))
-c = Counter(words)
-request_count = c.most_common(1)
-request_count = request_count[0]
-request = request_count[0]
-print("maximum no of requests: ", request)
+		
+#MY ATTEMPT ON GETTING #5 AND #6 TO WORK:(
+# WAS HAVING MAJOR DIFFICULTIES LEARNING REGEX, BUT HERE IS MY PROGRESS
 
-
-	
-	
+#mydata = data.read()
+#words = (re.findall(r'"(.*?)"', mydata))
+#c = Counter(words)
+#request_count = c.most_common(1)
+#request_count = request_count[0]
+#request = request_count[0]
+#print("maximum no of requests: ", request)
  #ANSWERING #1  
-print('total requests = {}'.format(count)) #for taking the amount of lines in logfile
+#print('total requests = {}'.format(count)) #for taking the amount of lines in logfile
 
 #ANSWERING #2
-#for date in datecount.keys():
-    #print('total for {} = {}'.format(date,datecount[date]))
-#for month in monthcount.keys():
-    #print('total for {} = {}'.format(month,monthcount[month]))
+for date in datecount.keys():
+    print('total for {} = {}'.format(date,datecount[date]))
+for month in monthcount.keys():
+    print('total for {} = {}'.format(month,monthcount[month]))
+	
+#couldnt open as CSV file :(
+#sample code from stackoverflow
+#import StringIO
+#s = StringIO.StringIO(text)
+#with open('fileName.csv', 'w') as f:
+    #for line in s:
+        #f.write(line)
 
 #ANSWERING #3 AND #4
 print 'Amount of Sucessful Requests: ', errorcount
