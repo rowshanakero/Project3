@@ -45,7 +45,7 @@ for line in data:
         continue
 		
 #MY ATTEMPT ON GETTING #5 AND #6 TO WORK:(
-# WAS HAVING MAJOR DIFFICULTIES LEARNING REGEX, BUT HERE IS MY PROGRESS
+# WAS HAVING MAJOR DIFFICULTIES LEARNING REGEX, BUT HERE IS MY PR
 
 #mydata = data.read()
 #words = (re.findall(r'"(.*?)"', mydata))
@@ -54,9 +54,7 @@ for line in data:
 #request_count = request_count[0]
 #request = request_count[0]
 #print("maximum no of requests: ", request)
- #ANSWERING #1  
-#print('total requests = {}'.format(count)) #for taking the amount of lines in logfile
-
+ 
 #ANSWERING #2
 for date in datecount.keys():
     print('total for {} = {}'.format(date,datecount[date]))
@@ -71,6 +69,17 @@ for month in monthcount.keys():
     #for line in s:
         #f.write(line)
 
+#ANSWERING #1  
+print ' ' #to add a new line
+print('total requests = {}'.format(count)) #for taking the amount of lines in logfile
+print ' '		
+		
 #ANSWERING #3 AND #4
+per1count = (count/errorcount) #getting percentages
+per2count = (count/newcount)
+
 print 'Amount of Sucessful Requests: ', errorcount
+print 'Percentage of Sucessful Requests: ', per1count, '%'
+print ' '
 print 'Amount of Unsucessful Requests: ', newcount
+print 'Percentage of Unsucessful Requests: ', per2count, '%'
