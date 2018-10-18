@@ -1,4 +1,5 @@
 
+
 #import urllib2  # the lib that handles the url stuff
 from urllib.request import urlretrieve
 
@@ -20,14 +21,14 @@ local_file, headers = urlretrieve(URL_PATH, LOCAL_FILE)
 
 for line in open(LOCAL_FILE): 
     #Example of one line
-    #'local - - [25/Oct/1994:10:08:07 -0600] "GET index.html HTTP/1.0" 200 3185\n'
+    #	
     
 	#CODE FOR #2
     count+=1 #to get total requests
     left=line.find('[')
     right=line.find(':')
     date=line[left+1:right]
-    if not date[0].isdigit(): #Something wrong with this line
+    if not date[0].isdigit(): 
         continue #skip
     if not date in datecount.keys():
         datecount[date]=1 #Set initial value
@@ -46,9 +47,18 @@ for line in open(LOCAL_FILE):
 		
 		
 	#CODE FOR #5 AND #6
-	lefty=line.find('HTTP/1.0')
-	righty=line.find('GET')
-	req=line[lefty:righty]
+	lefty=line.find('GET')
+	if lefty==-1:
+		lefty=line.find('PUT')
+	left_pos = lefty + 4
+	if lefty==-1:
+		lefty=line.find('POST')
+		left_pos = lefty + 5
+	if lefty==-1:
+		continue
+	righty=line.find('HTTP')
+	req=line[left_pos:righty]
+	
 	if not req in reqcount.keys():
 		reqcount[req]=1
 	else:
@@ -69,27 +79,35 @@ for line in open(LOCAL_FILE):
         continue
 		
 #FINDING MOST REQUESTED
-biggestval=0
-biggestkey=' '
-for k,v in open(reqcount.items()
-	if v>biggestval:
+biggestval= 0
+biggestkey= ' '
+counting = 0
+
+for k,v in reqcount.items()
+	if v > biggestval:
 		biggestval = v
 		biggestkey = k
+	if v==1:
+		counting+=1 #incrementing the total amount of values that have 1 request
+	
 
 mostreqfile= biggestkey
 
 
+print reqcount #printing the requested dictionary, just to check if it is working
+
+print mostreqfile #printing the key with most requests
+print counting #printing the amount of keys that only have 1 request
 
  
 #ANSWERING #2
 #for date in datecount.keys():
-    print('total for {} = {}'.format(date,datecount[date]))
+    #print('total for {} = {}'.format(date,datecount[date]))
 #for month in monthcount.keys():
     #print('total for {} = {}'.format(month,monthcount[month]))
 	
 
-print reqcount
-print mostreqfile
+
 
 
 
