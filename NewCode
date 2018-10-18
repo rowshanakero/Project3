@@ -1,18 +1,29 @@
 
-import urllib2  # the lib that handles the url stuff
+#import urllib2  # the lib that handles the url stuff
+from urllib.request import urlretrieve
+
 
 count =0
-data = urllib2.urlopen('https://s3.amazonaws.com/tcmg476/http_access_log') # it's a file like object and works just like a file
+#data = urllib2.urlopen('https://s3.amazonaws.com/tcmg476/http_access_log') # it's a file like object and works just like a file
 datecount = {} #Dictionary to store the count for every date
 monthcount = {} #Dictionary to store the count for every month
 errorcount=0
 newcount=0
-for line in data: 
+URL_PATH = 'https://s3.amazonaws.com/tcmg476/http_access_log'
+LOCAL_FILE = 'local_copy.log'
+reqcount = {} #dictionary for finding most requested
+
+
+# Use urlretrieve() to fetch a remote copy and save into the local file path
+local_file, headers = urlretrieve(URL_PATH, LOCAL_FILE)
+
+
+for line in open(LOCAL_FILE): 
     #Example of one line
     #'local - - [25/Oct/1994:10:08:07 -0600] "GET index.html HTTP/1.0" 200 3185\n'
     
 	#CODE FOR #2
-    count+=1
+    count+=1 #to get total requests
     left=line.find('[')
     right=line.find(':')
     date=line[left+1:right]
@@ -33,6 +44,19 @@ for line in data:
     except:
         continue
 		
+		
+	#CODE FOR #5 AND #6
+	lefty=line.find('HTTP/1.0')
+	righty=line.find('GET')
+	req=line[lefty:righty]
+	if not req in reqcount.keys():
+		reqcount[req]=1
+	else:
+		reqcount[req]+=1
+	
+
+
+	
 	 #CODE FOR #3 AND #4
     words=line.split()
     try:
@@ -44,42 +68,42 @@ for line in data:
     except:
         continue
 		
-#MY ATTEMPT ON GETTING #5 AND #6 TO WORK:(
-# WAS HAVING MAJOR DIFFICULTIES LEARNING REGEX, BUT HERE IS MY PR
+#FINDING MOST REQUESTED
+biggestval=0
+biggestkey=' '
+for k,v in open(reqcount.items()
+	if v>biggestval:
+		biggestval = v
+		biggestkey = k
 
-#mydata = data.read()
-#words = (re.findall(r'"(.*?)"', mydata))
-#c = Counter(words)
-#request_count = c.most_common(1)
-#request_count = request_count[0]
-#request = request_count[0]
-#print("maximum no of requests: ", request)
+mostreqfile= biggestkey
+
+
+
  
 #ANSWERING #2
-for date in datecount.keys():
+#for date in datecount.keys():
     print('total for {} = {}'.format(date,datecount[date]))
-for month in monthcount.keys():
-    print('total for {} = {}'.format(month,monthcount[month]))
+#for month in monthcount.keys():
+    #print('total for {} = {}'.format(month,monthcount[month]))
 	
-#couldnt open as CSV file :(
-#sample code from stackoverflow
-#import StringIO
-#s = StringIO.StringIO(text)
-#with open('fileName.csv', 'w') as f:
-    #for line in s:
-        #f.write(line)
+
+print reqcount
+print mostreqfile
+
+
 
 #ANSWERING #1  
-print ' ' #to add a new line
-print('total requests = {}'.format(count)) #for taking the amount of lines in logfile
-print ' '		
+#print ' ' #to add a new line
+#print('total requests = {}'.format(count)) #for taking the amount of lines in logfile
+#print ' '		
 		
 #ANSWERING #3 AND #4
 per1count = (count/errorcount) #getting percentages
 per2count = (count/newcount)
 
-print 'Amount of Sucessful Requests: ', errorcount
-print 'Percentage of Sucessful Requests: ', per1count, '%'
-print ' '
-print 'Amount of Unsucessful Requests: ', newcount
-print 'Percentage of Unsucessful Requests: ', per2count, '%'
+#print 'Amount of Sucessful Requests: ', errorcount
+#print 'Percentage of Sucessful Requests: ', per1count, '%'
+#print ' '
+#print 'Amount of Unsucessful Requests: ', newcount
+#print 'Percentage of Unsucessful Requests: ', per2count, '%'
