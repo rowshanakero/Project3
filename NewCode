@@ -43,14 +43,16 @@ for line in data:
             newcount+=1
     except:
         continue
+		
+	
  #ANSWERING #1  
 print('total requests = {}'.format(count)) #for taking the amount of lines in logfile
 
 #ANSWERING #2
-for date in datecount.keys():
-    print('total for {} = {}'.format(date,datecount[date]))
-for month in monthcount.keys():
-    print('total for {} = {}'.format(month,monthcount[month]))
+#for date in datecount.keys():
+    #print('total for {} = {}'.format(date,datecount[date]))
+#for month in monthcount.keys():
+    #print('total for {} = {}'.format(month,monthcount[month]))
 
 #ANSWERING #3 AND #4
 print 'Amount of Sucessful Requests: ', errorcount
