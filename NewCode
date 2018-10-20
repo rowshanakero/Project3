@@ -1,34 +1,23 @@
-
-
-#import urllib2  # the lib that handles the url stuff
-from urllib.request import urlretrieve
-
+import urllib2  # I decided to not use the downloading one since I had to use Python 3 and it was given me sooo much issues
+#I will accept the point deduction for not downloading the file to a local path and running on python2 insted of python3
 
 count =0
-#data = urllib2.urlopen('https://s3.amazonaws.com/tcmg476/http_access_log') # it's a file like object and works just like a file
+data = urllib2.urlopen('https://s3.amazonaws.com/tcmg476/http_access_log') # it's a file like object and works just like a file
 datecount = {} #Dictionary to store the count for every date
 monthcount = {} #Dictionary to store the count for every month
+reqcount = {} #Dictionary to store the count of every requested file
 errorcount=0
 newcount=0
-URL_PATH = 'https://s3.amazonaws.com/tcmg476/http_access_log'
-LOCAL_FILE = 'local_copy.log'
-reqcount = {} #dictionary for finding most requested
-
-
-# Use urlretrieve() to fetch a remote copy and save into the local file path
-local_file, headers = urlretrieve(URL_PATH, LOCAL_FILE)
-
-
-for line in open(LOCAL_FILE): 
+for line in data: 
     #Example of one line
-    #	
+    #'local - - [25/Oct/1994:10:08:07 -0600] "GET index.html HTTP/1.0" 200 3185\n'
     
 	#CODE FOR #2
-    count+=1 #to get total requests
+    count+=1
     left=line.find('[')
     right=line.find(':')
     date=line[left+1:right]
-    if not date[0].isdigit(): 
+    if not date[0].isdigit(): #Something wrong with this line
         continue #skip
     if not date in datecount.keys():
         datecount[date]=1 #Set initial value
@@ -45,28 +34,6 @@ for line in open(LOCAL_FILE):
     except:
         continue
 		
-		
-	#CODE FOR #5 AND #6
-	lefty=line.find('GET')
-	if lefty==-1:
-		lefty=line.find('PUT')
-	left_pos = lefty + 4
-	if lefty==-1:
-		lefty=line.find('POST')
-		left_pos = lefty + 5
-	if lefty==-1:
-		continue
-	righty=line.find('HTTP')
-	req=line[left_pos:righty]
-	
-	if not req in reqcount.keys():
-		reqcount[req]=1
-	else:
-		reqcount[req]+=1
-	
-
-
-	
 	 #CODE FOR #3 AND #4
     words=line.split()
     try:
@@ -78,50 +45,49 @@ for line in open(LOCAL_FILE):
     except:
         continue
 		
-#FINDING MOST REQUESTED
-biggestval= 0
-biggestkey= ' '
-counting = 0
-
-for k,v in reqcount.items()
-	if v > biggestval:
-		biggestval = v
-		biggestkey = k
-	if v==1:
-		counting+=1 #incrementing the total amount of values that have 1 request
+#CODE FOR #5 AND #6-----> commented out because I was not able to get it to fully work, wish i used regex!
+	#lefty=line.find('GET')
+	#if lefty==-1:
+		#lefty=line.find('PUT')
+	#left_pos = lefty + 4
+	#if lefty==-1:
+		#lefty=line.find('POST')
+		#left_pos = lefty + 5
+	#if lefty==-1:
+		#continue
+	#righty=line.find('HTTP')
+	#req=line[left_pos:righty]
 	
-
-mostreqfile= biggestkey
-
-
-print reqcount #printing the requested dictionary, just to check if it is working
-
-print mostreqfile #printing the key with most requests
-print counting #printing the amount of keys that only have 1 request
-
+	#if not req in reqcount.keys():
+		#reqcount[req]=1
+	#else:
+		#reqcount[req]+=1
  
 #ANSWERING #2
-#for date in datecount.keys():
-    #print('total for {} = {}'.format(date,datecount[date]))
-#for month in monthcount.keys():
-    #print('total for {} = {}'.format(month,monthcount[month]))
+for date in datecount.keys():
+    print('total for {} = {}'.format(date,datecount[date]))
+for month in monthcount.keys():
+    print('total for {} = {}'.format(month,monthcount[month]))
 	
-
-
-
-
+#couldnt open as CSV file :(
+#sample code from stackoverflow
+#import StringIO
+#s = StringIO.StringIO(text)
+#with open('fileName.csv', 'w') as f:
+    #for line in s:
+        #f.write(line)
 
 #ANSWERING #1  
-#print ' ' #to add a new line
-#print('total requests = {}'.format(count)) #for taking the amount of lines in logfile
-#print ' '		
+print ' ' #to add a new line
+print('total requests = {}'.format(count)) #for taking the amount of lines in logfile
+print ' '		
 		
 #ANSWERING #3 AND #4
 per1count = (count/errorcount) #getting percentages
 per2count = (count/newcount)
 
-#print 'Amount of Sucessful Requests: ', errorcount
-#print 'Percentage of Sucessful Requests: ', per1count, '%'
-#print ' '
-#print 'Amount of Unsucessful Requests: ', newcount
-#print 'Percentage of Unsucessful Requests: ', per2count, '%'
+print 'Amount of Sucessful Requests: ', errorcount
+print 'Percentage of Sucessful Requests: ', per1count, '%'
+print ' '
+print 'Amount of Unsucessful Requests: ', newcount
+print 'Percentage of Unsucessful Requests: ', per2count, '%'
